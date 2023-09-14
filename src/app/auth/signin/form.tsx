@@ -50,7 +50,7 @@ const SignInForm = () => {
                             <FormItem>
                                 <FormLabel>Username</FormLabel>
                                 <FormControl>
-                                    <Input placeholder="username..." {...field} />
+                                    <Input placeholder="username..." {...field} darkmode={false}/>
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -63,7 +63,7 @@ const SignInForm = () => {
                             <FormItem>
                                 <FormLabel>Password</FormLabel>
                                 <FormControl>
-                                    <PasswordInput placeholder="**********" {...field} />
+                                    <PasswordInput placeholder="**********" {...field} darkmode={false}/>
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -72,7 +72,7 @@ const SignInForm = () => {
                     {error != '' && <div className='text-red-500 font-medium'>{error}</div>}
                 </div>
                 <div className='flex mt-9 justify-center'>
-                    <Button className='w-32' type='submit' loading={loading} disabled={loading}>
+                    <Button className='w-32 bg-slate-950 text-slate-50 hover:bg-slate-900/90' type='submit' loading={loading} disabled={loading} variant="nocolor">
                         <span>Submit</span>
                     </Button>
                 </div>
