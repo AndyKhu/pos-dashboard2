@@ -7,12 +7,14 @@ import { Mail, Menu, User } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 
-
-const Header = () => {
+type THeaderProps = {
+  toggleCollapse: ()=> void
+}
+const Header = ({toggleCollapse}:THeaderProps) => {
   const {data:session} = useSession()
   return (
     <header className="h-[70px] flex items-center justify-between shadow-sm px-6 bg-white text-gray-600  dark:bg-neutral-900 dark:text-white ">
-        <Button size="icon" variant="ghost">
+        <Button size="icon" variant="ghost" onClick={toggleCollapse}>
           <Menu size={24}/>
         </Button>
         <div className="flex space-x-3 items-center">
