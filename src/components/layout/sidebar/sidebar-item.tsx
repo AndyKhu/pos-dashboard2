@@ -1,6 +1,5 @@
 "use client"
 import Link from "next/link";
-import { Menu } from "../../../lib/utils/MenuLists";
 import { cn } from "@/lib/utils";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import useMeasure from "react-use-measure";
@@ -9,6 +8,7 @@ import {useState} from "react"
 import { Menuicon } from "@/components/ui/menuIcon";
 import { ChevronDown, Circle } from "lucide-react";
 import { useLayoutState } from "@/state/layoutstate";
+import { Menu } from "@/lib/utils/type/tmenu";
 
 type TMenuItem = {
   collapse: boolean
@@ -16,10 +16,10 @@ type TMenuItem = {
 }
 const SingleMenu = ({collapse,item}:TMenuItem) => {
   const pathname = usePathname()
-  const isActive = item.link === "/"? pathname === item.link : pathname.includes(item.link || "")
+  const isActive = item.url === "/"? pathname === item.url : pathname.includes(item.url || "")
   return (
     <li>
-      <Link href={item.link || ""}>
+      <Link href={item.url || ""}>
         <div className={cn("flex items-center space-x-3 py-2 rounded-md text-sm whitespace-nowrap",isActive?"bg-blue-500 text-white":"text-gray-900 dark:text-white hover:bg-blue-400/10  hover:text-blue-500",collapse?"px-3 lg:p-3 lg:justify-center lg:group-hover:justify-start lg:group-hover:px-3":"px-3 md:p-3 md:justify-center md:group-hover:justify-start md:group-hover:px-3 lg:justify-start lg:px-3")}>
           <Menuicon name={item.icon} size={26}/>
           <span className={collapse?"lg:hidden lg:group-hover:block":"md:hidden md:group-hover:block lg:block"}>{item.title}</span>
@@ -32,8 +32,8 @@ const MenuWithChildren = ({collapse,item}:TMenuItem) => {
   const pathname = usePathname()
   let isActive = false
   const {menuCollapse,setMenuCollapse} = useLayoutState()
-  item.children?.map(child => {
-    if(pathname.includes(child.link || "")){
+  item.child?.map(child => {
+    if(pathname.includes(child.url || "")){
       isActive = true
     }
   })
@@ -62,11 +62,11 @@ const MenuWithChildren = ({collapse,item}:TMenuItem) => {
       <CollapsibleContent forceMount>
         <div style={{height:isOpen? height : 0,opacity:isOpen? 1:0}} className={cn(`overflow-hidden transition-all duration-300`,collapse?"lg:hidden lg:group-hover:block":"md:hidden md:group-hover:block lg:block")}>
           <ul ref={measureRef}>
-            {item.children?.map(child => {
+            {item.child?.map(child => {
               return (
                 <li key={child.id}>
-                  <Link href={child.link || ""}>
-                    <div className={cn("flex items-center space-x-3 rounded-md px-4 py-2 text-sm whitespace-nowrap capitalize",pathname.includes(child.link || "")?"text-blue-600 dark:text-blue-300":"text-gray-900 dark:text-white")}>
+                  <Link href={child.url || ""}>
+                    <div className={cn("flex items-center space-x-3 rounded-md px-4 py-2 text-sm whitespace-nowrap capitalize",pathname.includes(child.url || "")?"text-blue-600 dark:text-blue-300":"text-gray-900 dark:text-white")}>
                       <Circle size={8}/>
                       <span>{child.title}</span>
                     </div>
@@ -84,7 +84,7 @@ const MenuItem = ({collapse,item}:TMenuItem) => {
   return (
     <>
     {
-    item.children?
+    item.child && item.child?.length > 0?
         <MenuWithChildren collapse={collapse} item={item}/>
       :
         <SingleMenu collapse={collapse} item={item}/>

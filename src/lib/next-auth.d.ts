@@ -15,6 +15,9 @@ type User = {
       id: string,
       name: string
     }
+    token: {
+      accessToken: string
+    }
 }
 
 declare module "next-auth" {

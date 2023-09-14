@@ -1,21 +1,6 @@
+import { Login } from '@/services/authServices';
 import { NextAuthOptions } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
-
-const getUserLogin = () => ({
-    id: "id-1",
-    username: "admin",
-    profile: {
-      name: "Andy Khu",
-      gender: "Male",
-      job: "Frontend Developer",
-      email: "andykhu02@gmail.com",
-      img: "https://github.com/shadcn.png",
-    },
-    role: {
-      id: "idrole",
-      name: "admin",
-    }
-  })
 
 export const authOptions:NextAuthOptions = {
     providers: [
@@ -26,9 +11,15 @@ export const authOptions:NextAuthOptions = {
                 password: {label: 'Password'}
             },
             async authorize(credentials, req) {
-                if(credentials?.username === 'admin' && credentials.password === 'admin')
-                    return getUserLogin()
-                return null;
+                const data = {username: credentials?.username, password: credentials?.password}
+                try{
+                    const res = await Login(data)
+                    if(res.ok)
+                        return res.json()
+                    return res.text().then(text => {throw new Error(text)})
+                }catch(error){
+                    return null
+                }
             }
         })
     ],
