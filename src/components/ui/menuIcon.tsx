@@ -4,7 +4,10 @@ import {
   LayoutDashboardIcon,
   ShoppingBag,
   Package,
-  Settings
+  Settings,
+  SplitSquareHorizontal,
+  Search,
+  Building2
 } from "lucide-react"
 
 interface ICONPROPS extends LucideProps{
@@ -15,12 +18,18 @@ type ICONBANK = {
   ShoppingBag: LucideIcon
   Package: LucideIcon
   Settings: LucideIcon
+  Category: LucideIcon
+  Search: LucideIcon
+  Brand: LucideIcon
 }
 const IconBank:ICONBANK = {
   Home: LayoutDashboardIcon,
   ShoppingBag,
   Package,
-  Settings
+  Settings,
+  Search,
+  Category: SplitSquareHorizontal,
+  Brand: Building2
 }
 
 export type TMenuiconname = keyof ICONBANK

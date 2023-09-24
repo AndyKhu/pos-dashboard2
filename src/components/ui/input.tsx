@@ -1,24 +1,45 @@
 import * as React from "react"
 
 import { cn } from "@/lib/utils"
+import { Menuicon, TMenuiconname } from "./menuIcon"
 
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
     darkmode?:boolean
+    icon?: TMenuiconname
   }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type,darkmode = true, ...props }, ref) => {
+  ({ className, type,darkmode = true,icon, ...props }, ref) => {
     return (
-      <input
-        type={type}
-        className={cn(
-          "flex h-10 w-full rounded-md border border-slate-200  bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ",darkmode?"dark:border-slate-800  dark:bg-neutral-800 dark:ring-offset-slate-950 dark:placeholder:text-neutral-400 dark:focus-visible:ring-slate-300":"",
-          className
-        )}
-        ref={ref}
-        {...props}
-      />
+      <>
+        {
+          icon?
+          <div className={cn("relative w-full",className)}>
+            <span className="absolute left-3 top-1/2 -translate-y-1/2"><Menuicon name={icon} className="text-muted-foreground" size={16}/></span>
+            <input
+              type={type}
+              className={cn(
+                "flex h-10 w-full rounded-md border border-input pl-9 pr-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+                darkmode?"bg-background ring-offset-background":"bg-white"
+              )}
+              ref={ref}
+              {...props}
+            />
+          </div>
+          :
+          <input
+            type={type}
+            className={cn(
+              "flex h-10 w-full rounded-md border border-input  px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+              darkmode?"bg-background ring-offset-background":"bg-white",className
+            )}
+            ref={ref}
+            {...props}
+          />
+        }
+      </>
+      
     )
   }
 )

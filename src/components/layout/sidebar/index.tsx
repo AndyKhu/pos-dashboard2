@@ -8,7 +8,7 @@ import { useLayoutState } from "@/state/layoutstate";
 import { useEffect, useState } from "react";
 import { getMenuAccess } from "@/services/authServices";
 import { useSession } from "next-auth/react";
-import { Menu } from "@/lib/utils/type/tmenu";
+import { Menu } from "@/lib/type/tmenu";
 
 const Sidebar = () => {
   const {collapse} = useLayoutState()

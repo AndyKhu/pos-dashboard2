@@ -7,3 +7,12 @@ export type Menu = {
   url?: string
   child?: Omit<Menu,"icon"|"children">[]
 }
+
+export type TMenuPermission = {
+  roleId: string
+  menuId: string
+  add: boolean
+  view: boolean
+  edit: boolean
+  delete: boolean
+}

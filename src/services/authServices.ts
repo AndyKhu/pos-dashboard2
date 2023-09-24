@@ -16,8 +16,29 @@ export const Login = (data:TLoginProps) => {
   
 }
 
+
+export const verifiedToken = (token?:string) => {
+  return fetch(`${BASE_URL}/auth/verifiedtoken`,{
+      method: "GET",
+      headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+      }
+  })
+}
+
 export const getMenuAccess = (token:string) => {
   return fetch(`${BASE_URL}/menuaccess`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
+    }
+  });
+}
+
+export const getMenuPermission = (menutittle:string,token:string) => {
+  return fetch(`${BASE_URL}/menupermission?title=${menutittle}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",

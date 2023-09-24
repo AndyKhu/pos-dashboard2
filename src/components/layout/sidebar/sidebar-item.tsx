@@ -8,7 +8,7 @@ import {useState} from "react"
 import { Menuicon } from "@/components/ui/menuIcon";
 import { ChevronDown, Circle } from "lucide-react";
 import { useLayoutState } from "@/state/layoutstate";
-import { Menu } from "@/lib/utils/type/tmenu";
+import { Menu } from "@/lib/type/tmenu";
 
 type TMenuItem = {
   collapse: boolean
