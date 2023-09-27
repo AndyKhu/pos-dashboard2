@@ -15,7 +15,7 @@ const ProductPage = async() => {
   }
   const session = await getServerSession(authOptions)
   const token = session?.user.token.accessToken || ""
-  const permission:TMenuPermission =  (await (await getMenuPermission("Product",token)).json()).permission
+  const permission:TMenuPermission =  await getMenuPermission("Product",token)
   const data = (await (await getProducts(token)).json())
   return (
     <PageContainerLists headerOption={headerOption} permission={permission}>

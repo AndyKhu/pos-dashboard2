@@ -117,16 +117,10 @@ const BrandPage = () => {
   }
   useEffect(()=> {
     const fetchdata = async () => {
-      const res = await getEnumLists("BRAND",token)
-      const perm = await getMenuPermission("Category",token)
-      if(res.ok){
-        const resData = await res.json()
-        setBrandLists(resData.data)
-      }
-      if(perm.ok){
-        const permData = await perm.json()
-        setMenuPermission(permData.permission)
-      }
+      const lists = await getEnumLists("BRAND",token)
+      const permission = await getMenuPermission("Category",token)
+      setMenuPermission(permission)
+      setBrandLists(lists)
     }
     if(token){
       fetchdata()

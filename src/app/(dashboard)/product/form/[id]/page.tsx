@@ -13,18 +13,18 @@ import { TMenuPermission } from "@/lib/type/tmenu";
 const ProductFormPage = async ({ params }: { params: { id: string } }) => {
   const session = await getServerSession(authOptions)
   const token = session?.user.token.accessToken || ""
-  const permission:TMenuPermission =  (await (await getMenuPermission("Product",token)).json()).permission
+  const permission:TMenuPermission =  await getMenuPermission("Product",token)
 
   const headerOption:THeaderOption = {
     icon: "Package",
     title: "Product Form"
   }
-  const product = (await (await getProduct(params.id,token)).json()).data
+  const product = await getProduct(params.id,token)
   if(!product && params.id !== "add")
     notFound()
-  const unitLists = (await (await getEnumLists("UNIT",token)).json()).data
-  const categoryLists = (await (await getEnumLists("CATEGORY",token)).json()).data
-  const brandLists = (await (await getEnumLists("BRAND",token)).json()).data
+  const unitLists = await getEnumLists("UNIT",token)
+  const categoryLists = await getEnumLists("CATEGORY",token)
+  const brandLists = await getEnumLists("BRAND",token)
   if(!permission.view)
     return (<div>You got no access here.</div>)
   return (

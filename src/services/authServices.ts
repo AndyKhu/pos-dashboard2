@@ -27,7 +27,7 @@ export const verifiedToken = (token?:string) => {
   })
 }
 
-export const getMenuAccess = (token:string) => {
+export const getMenuAccess = async (token:string) => {
   return fetch(`${BASE_URL}/menuaccess`, {
     method: "GET",
     headers: {
@@ -37,12 +37,18 @@ export const getMenuAccess = (token:string) => {
   });
 }
 
-export const getMenuPermission = (menutittle:string,token:string) => {
-  return fetch(`${BASE_URL}/menupermission?title=${menutittle}`, {
+export const getMenuPermission = async (menutittle:string,token:string) => {
+  const res = await fetch(`${BASE_URL}/menupermission?title=${menutittle}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
       "Authorization": `Bearer ${token}`
     }
-  });
+  })
+  if(!res.ok) {
+    throw new Error('Failed to Fetch data')
+  }
+  const data = await res.json()
+  
+  return data.permission
 }

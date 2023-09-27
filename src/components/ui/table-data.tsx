@@ -111,7 +111,7 @@ const TableData = <TData extends { id?: string | number},TValue>({
                 return(
                   <th key={header.id} className={cn("h-12 px-4 text-left align-middle font-medium text-primary-foreground dark:text-muted-foreground [&:has([role=checkbox])]:pr-0",meta.className)} style={{textAlign: meta.align}}>
                     {header.isPlaceholder?null:
-                    <div className={cn(sort && "flex items-center gap-1 transition-colors cursor-pointer border-none rounded bg-none p-0 text-inherit select-none focus-visible:outline-0 focus-visible:shadow-sm hover:text-gray-300 dark:hover:text-gray-200",selectable && "h-4")}
+                    <div className={cn(sort && "flex items-center gap-1 transition-colors cursor-pointer border-none rounded bg-none p-0 text-inherit select-none focus-visible:outline-0 focus-visible:shadow-sm hover:text-gray-300 dark:hover:text-gray-200",selectable && "h-4",sort && meta.align == "center" && "justify-center")}
                       onClick={handler} 
                       onKeyDown={(e) => {
                         if (e.key === ' ' || e.key === 'Enter') {

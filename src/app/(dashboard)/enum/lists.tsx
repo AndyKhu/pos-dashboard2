@@ -1,5 +1,5 @@
 "use client"
-import Table from "@/components/ui/table";
+import Table from "@/components/ui/table-withheader";
 import { enumTableConfig } from "./config/column";
 import { TEnumDB } from "@/lib/type/tenumdb";
 import { Button } from "@/components/ui/button";

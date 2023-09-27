@@ -34,12 +34,18 @@ export const deleteEnum = (listId: string[],token?:string) => {
   })
 }
 
-export const getEnumLists = (type:string,token?:string) => {
-  return fetch(`${BASE_URL}/enum?type=${type}`,{
+export const getEnumLists = async (type:string,token?:string) => {
+  const res =  await fetch(`${BASE_URL}/enum?type=${type}`,{
     method: "GET",
     headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`
     }
   })
+  if(!res.ok) {
+    throw new Error('Failed to Fetch data')
+  }
+  const data = await res.json()
+  
+  return data.data
 }

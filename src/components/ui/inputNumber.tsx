@@ -10,7 +10,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement>{
     currency?:boolean
 }
 
-const formatCurrency = (value: number,currency:boolean) => {
+export const formatCurrency = (value: number,currency:boolean) => {
   if(currency)
     return new Intl.NumberFormat('id-ID', {
       style: 'currency',

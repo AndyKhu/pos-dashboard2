@@ -1,8 +1,8 @@
 import { BASE_URL } from "@/lib/defaultConfig"
-import { TProduct } from "@/lib/type/tproduct"
+import { TSale } from "@/lib/type/tsale"
 
-export const saveProduct = (data: TProduct,token?:string) => {
-  return fetch(`${BASE_URL}/product`,{
+export const saveSale = (data: TSale,token?:string) => {
+  return fetch(`${BASE_URL}/sale`,{
     method: "POST",
     headers: {
         "Content-Type": "application/json",
@@ -12,8 +12,8 @@ export const saveProduct = (data: TProduct,token?:string) => {
   })
 }
 
-export const getProduct = async (id:string, token?:string) => {
-  const res = await fetch(`${BASE_URL}/product?id=${id}`,{
+export const getSale = async (id:string, token?:string) => {
+  const res = await fetch(`${BASE_URL}/sale?id=${id}`,{
     method: "GET",
     headers: {
         "Content-Type": "application/json",
@@ -27,9 +27,8 @@ export const getProduct = async (id:string, token?:string) => {
   
   return data.data
 }
-
-export const getProducts = (token?:string,skip?:number,search?:string) => {
-  return fetch(`${BASE_URL}/products?limit=10&skip=${skip || 0}&search=${search||""}`,{
+export const getSales = (token?:string,skip?:number,search?:string) => {
+  return fetch(`${BASE_URL}/sales?limit=10&skip=${skip || 0}&search=${search||""}`,{
     method: "GET",
     headers: {
         "Content-Type": "application/json",
@@ -38,8 +37,8 @@ export const getProducts = (token?:string,skip?:number,search?:string) => {
   })
 }
 
-export const updateProduct = (data: TProduct,token?:string) => {
-  return fetch(`${BASE_URL}/product`,{
+export const updateSale = (data: TSale,token?:string) => {
+  return fetch(`${BASE_URL}/sale`,{
     method: "PUT",
     headers: {
         "Content-Type": "application/json",
@@ -49,8 +48,8 @@ export const updateProduct = (data: TProduct,token?:string) => {
   })
 }
 
-export const deleteProduct = (listId: string[],token?:string) => {
-  return fetch(`${BASE_URL}/product`,{
+export const deleteSales = (listId: string[],token?:string) => {
+  return fetch(`${BASE_URL}/sales`,{
     method: "DELETE",
     headers: {
         "Content-Type": "application/json",

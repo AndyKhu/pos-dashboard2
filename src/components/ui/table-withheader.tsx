@@ -1,13 +1,18 @@
 import { CellContext, ColumnDef, HeaderContext, Row, RowData, flexRender, getCoreRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table"
 import { CheckedState } from '@radix-ui/react-checkbox'
-import React, { useCallback, useMemo } from "react"
+import { useCallback, useMemo, useState } from "react"
 import { Checkbox } from "./checkbox"
-import { ArrowDown, Lock} from "lucide-react"
+import { ArrowDown, Lock, MoreHorizontal } from "lucide-react"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "./dropdown-menu"
 import { Button } from "./button"
 import { cn } from "@/lib/utils"
 import * as VisuallyHidden from '@radix-ui/react-visually-hidden'
 import { ScrollArea } from "./scroll-area"
 import { Card } from "./card"
+import { Menuicon } from "./menuIcon"
+import { Separator } from "./separator"
+import { THeaderOption } from "../page-container"
+
 export interface TableProps<TData, TValue> {
   data: TData[]
   columns: ColumnDef<TData, TValue>[]
@@ -20,8 +25,8 @@ export interface TableProps<TData, TValue> {
   selectable?: boolean
   filters?: ((rows: TData[]) => TData[])[]
   pagination?: boolean | number
-  handleUpdateTable: (rowIndex: number, columnId: string, value: unknown)=> void
 
+  headerOption: THeaderOption
   className?: string
   children?: React.ReactNode
   selection:{
@@ -36,25 +41,6 @@ declare module '@tanstack/react-table' {
     className?: string
     align?: 'left' | 'center' | 'right'
   }
-  interface TableMeta<TData extends RowData> {
-    updateData: (rowIndex: number, columnId: string, value: unknown) => void
-  }
-}
-
-function useSkipper() {
-  const shouldSkipRef = React.useRef(true)
-  const shouldSkip = shouldSkipRef.current
-
-  // Wrap a function with this to skip a pagination reset temporarily
-  const skip = React.useCallback(() => {
-    shouldSkipRef.current = false
-  }, [])
-
-  React.useEffect(() => {
-    shouldSkipRef.current = true
-  })
-
-  return [shouldSkip, skip] as const
 }
 
 function SelectionHeader<TData, TValue>({ table }: HeaderContext<TData, TValue>) {
@@ -95,7 +81,7 @@ const Table = <TData extends { id?: string | number; disableSelection?: boolean 
   className,
   children,
   selection,
-  handleUpdateTable,
+  headerOption,
   ...props
 }:TableProps<TData,TValue>) => {
   const columns = useMemo(() => {
@@ -112,6 +98,15 @@ const Table = <TData extends { id?: string | number; disableSelection?: boolean 
           cell: SelectionCell,
         },
         ...userColumns,
+        // {
+        //   id: 'actions',
+        //   enableSorting: false,
+        //   enableResizing: false,
+        //   enableGlobalFilter: false,
+        //   meta: { className: "w-[100px]", align: 'right' },
+        //   header: getActionsHeader(headerActions),
+        //   cell: getActionsCell(rowActions),
+        // },
       ] as ColumnDef<TData, TValue>[]
     }
     return userColumns
@@ -122,10 +117,10 @@ const Table = <TData extends { id?: string | number; disableSelection?: boolean 
     if (parent) return [parent.id, index].join('.')
     return index.toString()
   }, [])
-  const [autoResetPageIndex, skipAutoResetPageIndex] = useSkipper()
   const table = useReactTable({
     data: filteredData,
     columns,
+    getRowId,
     initialState: {
       pagination: {
         pageSize: typeof pagination === 'number' ? pagination : 10,
@@ -137,17 +132,9 @@ const Table = <TData extends { id?: string | number; disableSelection?: boolean 
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: pagination ? getPaginationRowModel() : undefined,
     onRowSelectionChange: selection.setRowSelection,
-    autoResetPageIndex,
     state: {
       rowSelection: selection.rowSelection
-    },
-    meta: {
-      updateData: (rowIndex, columnId, value) => {
-        // Skip page index reset until after next rerender
-        skipAutoResetPageIndex()
-        handleUpdateTable(rowIndex,columnId,value)
-      },
-    },
+    }
   })
 
   const { pageSize, pageIndex } = table.getState().pagination
@@ -161,7 +148,16 @@ const Table = <TData extends { id?: string | number; disableSelection?: boolean 
   }
   return (
     <>
-      {children?<>{children}</>:null}
+    <Card className="mb-2">
+      <div className="hidden p-5 md:flex justify-between items-center">
+        <span className="flex items-center space-x-3">
+          <Menuicon name={headerOption.icon}/>
+          <h2 className="font-semibold text-xl capitalize">{headerOption.title} List</h2>
+        </span>
+      </div>
+      <Separator/>
+      {children?<div className="p-3 grid grid-cols-2 xl:grid-cols-4 gap-3">{children}</div>:null}
+    </Card>
     <Card>
       <div className={cn(className,"relative")} {...props}>
         <div className="relative shadow-sm rounded-md bg-card w-full overflow-hidden text-slate-950 dark:text-white text-sm">
@@ -170,7 +166,7 @@ const Table = <TData extends { id?: string | number; disableSelection?: boolean 
               <VisuallyHidden.Root asChild>
                 <caption>{caption}</caption>
               </VisuallyHidden.Root>
-              <thead className="bg-primary dark:bg-neutral-800 vertical-inherit text-white text-sm font-medium">
+              <thead className="bg-primary vertical-inherit text-white text-sm font-medium">
                 {table.getHeaderGroups().map((headerGroup) => (
                   <tr className="vertical-inherit" key={headerGroup.id}>
                     {headerGroup.headers.map((header) => {
@@ -180,10 +176,10 @@ const Table = <TData extends { id?: string | number; disableSelection?: boolean 
                       const handler = getToggleSortingHandler()
 
                       return (
-                        <th className={cn("vertical-inherit p-3  text-primary-foreground dark:text-muted-foreground text-sm font-medium", meta.className)} key={header.id} style={{ textAlign: meta.align }}>
+                        <th className={cn("vertical-inherit p-3 text-white text-sm font-medium", meta.className)} key={header.id} style={{ textAlign: meta.align }}>
                           {header.isPlaceholder ? null : (
                             <div
-                              className={cn(sort && "flex items-center gap-1 transition-colors cursor-pointer border-none rounded bg-none p-0 text-inherit select-none focus-visible:outline-0 focus-visible:shadow-sm hover:text-slate-950")}
+                              className={cn(sort && "flex items-center gap-1 transition-colors cursor-pointer border-none rounded bg-none p-0 text-inherit select-none focus-visible:outline-0 focus-visible:shadow-sm hover:text-slate-950",selectable && "h-4")}
                               onClick={handler}
                               onKeyDown={(e) => {
                                 if (e.key === ' ' || e.key === 'Enter') {
@@ -215,7 +211,7 @@ const Table = <TData extends { id?: string | number; disableSelection?: boolean 
               <tbody className="vertical-inherit">
                 {table.getRowModel().rows.map((row) => (
                   <tr className="vertical-inherit cursor-pointer hover:bg-neutral-200 dark:hover:bg-neutral-800" key={row.id}
-                  >
+                  onClick={(event)=> handleRowClick(row,event)} >
                     {row.getVisibleCells().map((cell) => {
                       const { meta = {} } = cell.column.columnDef
 
@@ -230,7 +226,7 @@ const Table = <TData extends { id?: string | number; disableSelection?: boolean 
               </tbody>
             </table>
             {filteredData.length === 0 ? (
-              <div className="flex flex-col items-center justify-center w-full text-primary dark:text-primary-foreground text-center" style={{ height: `${(defaultRows?defaultRows:1)*44}px` }}>
+              <div className="flex flex-col items-center justify-center w-full text-slate-800 text-center" style={{ height: `${(defaultRows?defaultRows:1)*44}px` }}>
                 {empty}
               </div>
             ) : null}

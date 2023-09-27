@@ -117,16 +117,10 @@ const UnitPage = () => {
   }
   useEffect(()=> {
     const fetchdata = async () => {
-      const res = await getEnumLists("UNIT",token)
-      const perm = await getMenuPermission("Category",token)
-      if(res.ok){
-        const resData = await res.json()
-        setUnitLists(resData.data)
-      }
-      if(perm.ok){
-        const permData = await perm.json()
-        setMenuPermission(permData.permission)
-      }
+      const lists = await getEnumLists("UNIT",token)
+      const permission = await getMenuPermission("Category",token)
+      setMenuPermission(permission)
+      setUnitLists(lists)
     }
     if(token){
       fetchdata()

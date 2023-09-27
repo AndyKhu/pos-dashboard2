@@ -12,7 +12,7 @@ import Combobox from "@/components/ui/combobox";
 import { useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useToast } from "@/components/ui/use-toast";
-import { saveProduct, updateProduct } from "@/services/productServices";
+import { getProduct, saveProduct, updateProduct } from "@/services/productServices";
 import InputNumber from "@/components/ui/inputNumber";
 import { TMenuPermission } from "@/lib/type/tmenu";
 import { useRouter } from "next/navigation";
@@ -63,14 +63,20 @@ const ProductForm = ({product,lists,permission}:ProductFormProps) => {
       form.reset()
     }
   }
+  const fetchData = async (id?:string)=> {
+    if(id){
+      const resData = await getProduct(id,token)
+      form.reset(resData)
+    }
+  }
   useEffect(()=>{
     form.setValue("unitId",lists.unitLists[0].id || "")
     form.setValue("categoryId",lists.categoryLists[0].id || "")
     form.setValue("brandId",lists.brandLists[0].id || "")
-    if(product)
-        form.reset(product)
+    if(token && product?.id)
+        fetchData(product.id)
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[])
+  },[token])
   return (
     <Form {...form}>
         <form onSubmit={form.handleSubmit(EventHandler.onSubmit)}>

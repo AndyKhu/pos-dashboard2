@@ -26,10 +26,11 @@ interface ComboboxProps<T> {
   onChange: (e:string) => void,
   name?: string
   disabled?:boolean
+  id?:string
 }
 
 const Combobox = React.forwardRef<HTMLButtonElement, ComboboxProps<any>>(
-  ({ Lists,value,onChange,disabled=false,name=""}, ref) => {
+  ({ Lists,value,onChange,disabled=false,name="",id}, ref) => {
     const [open, setOpen] = React.useState(false)
     return (
         <Popover open={open} onOpenChange={setOpen}>
@@ -38,6 +39,7 @@ const Combobox = React.forwardRef<HTMLButtonElement, ComboboxProps<any>>(
               variant="outline"
               role="combobox"
               aria-expanded={open}
+              id={id}
               ref={ref}
               className="w-full justify-between"
               disabled={disabled}
