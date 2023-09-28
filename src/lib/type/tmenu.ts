@@ -9,10 +9,12 @@ export type Menu = {
 }
 
 export type TMenuPermission = {
+  id?:string
   roleId: string
   menuId: string
   add: boolean
   view: boolean
   edit: boolean
   delete: boolean
+  menu?: Menu
 }

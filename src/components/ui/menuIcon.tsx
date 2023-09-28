@@ -7,7 +7,8 @@ import {
   Settings,
   SplitSquareHorizontal,
   Search,
-  Building2
+  Building2,
+  User2
 } from "lucide-react"
 
 interface ICONPROPS extends LucideProps{
@@ -21,6 +22,7 @@ type ICONBANK = {
   Category: LucideIcon
   Search: LucideIcon
   Brand: LucideIcon
+  User: LucideIcon
 }
 const IconBank:ICONBANK = {
   Home: LayoutDashboardIcon,
@@ -29,7 +31,8 @@ const IconBank:ICONBANK = {
   Settings,
   Search,
   Category: SplitSquareHorizontal,
-  Brand: Building2
+  Brand: Building2,
+  User:User2
 }
 
 export type TMenuiconname = keyof ICONBANK
